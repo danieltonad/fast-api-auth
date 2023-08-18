@@ -1,3 +1,5 @@
 uvicorn[standard]
+pydantic
 fastapi
 deta
+python-dotenv
