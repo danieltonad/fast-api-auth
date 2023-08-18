@@ -1,5 +1,5 @@
 uvicorn[standard]
-pydantic
+pydantic[email]
 fastapi
 deta
 python-dotenv
