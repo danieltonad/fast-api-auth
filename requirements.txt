@@ -3,3 +3,5 @@ pydantic[email]
 fastapi
 deta
 python-dotenv
+pyjwt
+python-decouple
