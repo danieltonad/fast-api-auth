@@ -3,6 +3,7 @@ from request.create_user_request import createUserRequest
 from auth.jwt import signJWT, decodeJWT
 from middleware.auth import custom_middleware
 from routes.user import user
+import hashlib
 
 app = FastAPI()
 
