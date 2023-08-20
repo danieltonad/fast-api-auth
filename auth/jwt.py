@@ -14,23 +14,23 @@ def token_response(token: str):
         'access_token': token
     }
 
-def signJWT(user: str):
+def signJWT(user: dict):
     payload = {
         'user': user,
         'expiry': time() + 1200
     }
-    token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
+    token = jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
     return token_response(token)
 
 def decodeJWT(token: str):
     try:
-        decoded_token = jwt.decode(token, JWT_SECRET, JWT_ALGORITHM)
+        decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
         print(decoded_token)
-        # if decoded_token:
-        #     def getUser():
-        #         return decoded_token['user']
-        return True
-        # return True if decoded_token['expires'] >= time() else HTTPException(status_code=401, detail="Unathorized")
+        if decoded_token:
+            def getUser():
+                return decoded_token['user']
+        return True if decoded_token['expires'] >= time() else HTTPException(status_code=401, detail="Unathorized")
 
     except:
-        return HTTPException(status_code=500, detail="Token Error", headers=Header())
+        return 100
+        # return HTTPException(status_code=500, detail="Token Error", headers=Header())
