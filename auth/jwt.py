@@ -25,11 +25,7 @@ def signJWT(user: dict):
 def decodeJWT(token: str):
     try:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        print(decoded_token)
-        if decoded_token:
-            def getUser():
-                return decoded_token['user']
-        return True if decoded_token['expires'] >= time() else HTTPException(status_code=401, detail="Unathorized")
+        return decoded_token['user'] if  decoded_token['expires'] >= time() else HTTPException(status_code=401, detail="Unathorized")
 
     except:
         return 100
