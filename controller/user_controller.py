@@ -7,10 +7,13 @@ from utility.hash import hash_pwd
 from auth.jwt import signJWT
 
 def login_user(user: userLoginRequest):
-    find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])
-    if find['password'] == hash_pwd(user.password):
-        return signJWT(find)
-    return {'details': 'invalid user credentials'}
+    try:
+        find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])
+        if find['password'] == hash_pwd(user.password):
+            return signJWT(find)
+        return {'details': 'invalid user credentials'}
+    except:
+        return {'details': 'invalid user credentials'}
 
 
 def create_user(user: createUserRequest):
