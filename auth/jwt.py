@@ -1,5 +1,5 @@
 import jwt
-from fastapi import HTTPException, Header
+from fastapi import HTTPException
 from dotenv import load_dotenv
 import os
 from time import time
@@ -25,10 +25,8 @@ def signJWT(user: dict):
 def decodeJWT(token: str):
     try:
         decoded_token = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
-        # print(decoded_token)
-        return decoded_token['user'] if  decoded_token['expiry'] >= time() else False
+        print(decoded_token)
+        return decoded_token['user'] if  decoded_token['expiry'] >= time() else HTTPException(status_code=401, detail="authorization expired")
 
     except:
-        print({'details':'json error'})
-        return False
-        # return HTTPException(status_code=500, detail="Token Error", headers=Header())
+        raise HTTPException(status_code=401, detail="UnAuthorized")
