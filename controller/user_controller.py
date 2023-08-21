@@ -1,10 +1,11 @@
-from request.create_user_request import createUserRequest, userLoginRequest
+from request.user_request import createUserRequest, userLoginRequest, passwordChangeRequest
 import uuid
 from pydantic import EmailStr
 from config.db import database
 from schema.user_schema import users_serializer, user_serializer
 from utility.hash import hash_pwd
 from auth.jwt import signJWT
+from model.user_model import UserModel
 
 def login_user(user: userLoginRequest):
     try:
@@ -47,3 +48,7 @@ def delete_user(id: str):
 
 def update_user(id: str, user: dict):
     return 'done'
+
+def password_change(user: UserModel, payload: passwordChangeRequest):
+    if user['password'] == hash_pwd(payload['old_password']) and payload['old_password'] != payload['new_password']:
+     return {'details': 'password changed'} if database.put({'password': hash_pwd(payload.new_password)}, key=user.id) else {'details': 'unable to change password '}
