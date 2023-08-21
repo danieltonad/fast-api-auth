@@ -4,8 +4,7 @@ def user_serializer(user):
         'first_name': user['first_name'],
         'last_name': user['last_name'],
         'email': user['email'],
-        'password': user['password'],
-        'active': user['active'],
+        'password': user['password']
     }
 
 def users_serializer(users):

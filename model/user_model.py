@@ -6,4 +6,3 @@ class UserModel(BaseModel):
     last_name: str
     email: EmailStr
     password: str
-    active: bool
