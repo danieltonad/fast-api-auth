@@ -1,9 +1,13 @@
-from request.create_user_request import createUserRequest
+from request.create_user_request import createUserRequest, userLoginRequest
 import uuid
 from pydantic import EmailStr
 from config.db import database
 from schema.user_schema import users_serializer
 from utility.hash import hash_pwd
+
+def login_user(user: userLoginRequest):
+    return 100
+
 
 def create_user(user: createUserRequest):
     if not checkEmailDuplicate(user.email):
