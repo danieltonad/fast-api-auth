@@ -49,6 +49,7 @@ def delete_user(id: str):
 def update_user(id: str, user: dict):
     return 'done'
 
-def password_change(user: UserModel, payload: passwordChangeRequest):
-    if user['password'] == hash_pwd(payload['old_password']) and payload['old_password'] != payload['new_password']:
-     return {'details': 'password changed'} if database.put({'password': hash_pwd(payload.new_password)}, key=user.id) else {'details': 'unable to change password '}
+def password_change(user: UserModel, payload):
+    if user['password'] == hash_pwd(payload['old_password']): # and payload['old_password'] != payload['new_password']:
+        print(payload['new_password'])
+    #  return {'details': 'password changed'} if database.put({'password': hash_pwd(payload.new_password)}, key=user.id) else {'details': 'unable to change password '}
