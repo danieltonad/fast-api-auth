@@ -9,12 +9,13 @@ from model.user_model import UserModel
 
 def login_user(user: userLoginRequest):
     try:
-        find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])
+        # print(database.fetch({'email': user.email}).items)
+        find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])(find['password'],hash_pwd(user.password))
         if find['password'] == hash_pwd(user.password):
             return signJWT(find)
         return {'details': 'invalid user credentials'}
     except:
-        return {'details': 'invalid user credentials'}
+        return {'details': 'Network Error'}
 
 
 def create_user(user: createUserRequest):
@@ -30,6 +31,7 @@ def create_user(user: createUserRequest):
 def checkEmailDuplicate(email: EmailStr):
     _ = database.fetch({'email': email})._items
     return True if len(_) > 0 else False
+
 def getUsers() -> []:
     data = []
     prev = database.fetch()
@@ -50,6 +52,10 @@ def update_user(id: str, user: dict):
     return 'done'
 
 def password_change(user: UserModel, payload):
-    if user['password'] == hash_pwd(payload['old_password']): # and payload['old_password'] != payload['new_password']:
-        print(payload['new_password'])
-    #  return {'details': 'password changed'} if database.put({'password': hash_pwd(payload.new_password)}, key=user.id) else {'details': 'unable to change password '}
+    if user['password'] == hash_pwd(payload['old_password']):
+         if payload['old_password'] != payload['new_password']:
+             return {'details': 'password changed'} if database.put({'password': hash_pwd(payload['new_password'])}, key=user['id']) else {'details': 'unable to change password '}
+         else:
+             return {'details': 'old password cannot be same as new'}
+    else:
+        return {'details': 'incorrect password'}
