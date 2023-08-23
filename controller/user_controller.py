@@ -9,8 +9,8 @@ from model.user_model import UserModel
 
 def login_user(user: userLoginRequest):
     try:
-        # print(database.fetch({'email': user.email}).items)
-        find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])(find['password'],hash_pwd(user.password))
+        # print(database.fetch({'email': user.email}, limit=1)._items[0])
+        find = user_serializer(database.fetch({'email': user.email}, limit=1)._items[0])
         if find['password'] == hash_pwd(user.password):
             return signJWT(find)
         return {'details': 'invalid user credentials'}
@@ -54,7 +54,10 @@ def update_user(id: str, user: dict):
 def password_change(user: UserModel, payload):
     if user['password'] == hash_pwd(payload['old_password']):
          if payload['old_password'] != payload['new_password']:
-             return {'details': 'password changed'} if database.put({'password': hash_pwd(payload['new_password'])}, key=user['id']) else {'details': 'unable to change password '}
+             user['password'] = hash_pwd(payload['new_password'])
+             change = database.update(updates={'password': hash_pwd(payload['new_password'])}, key=user['id'])
+             print(change)
+             return {'details': 'password changed'} if not change else {'details': 'unable to change password '}
          else:
              return {'details': 'old password cannot be same as new'}
     else:
