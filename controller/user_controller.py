@@ -26,7 +26,7 @@ def create_user(user: createUserRequest):
         user_obj.update(user)
         return 'User Created' if database.put(user_obj) else 'Unable to create user !!'
     else:
-        return {'detals': 'Email Already Exist!'}
+        return {'details': 'Email Already Exist!'}
 
 def checkEmailDuplicate(email: EmailStr):
     _ = database.fetch({'email': email})._items
